@@ -49,15 +49,12 @@ fun PulseApp() {
     val viewModel: HeartRateViewModel = viewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // BLE permissions depending on Android version
     val permissions = remember {
-        buildList {
-
-            add(android.Manifest.permission.BLUETOOTH_SCAN)
-            add(android.Manifest.permission.BLUETOOTH_CONNECT)
-            add(android.Manifest.permission.POST_NOTIFICATIONS)
-            add(android.Manifest.permission.ACCESS_FINE_LOCATION)
-        }
+        listOf(
+            android.Manifest.permission.BLUETOOTH_SCAN,
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.POST_NOTIFICATIONS,
+        )
     }
 
     val permissionState = rememberMultiplePermissionsState(permissions)
@@ -134,7 +131,7 @@ fun PulseApp() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Um dein Garmin HRM-200 zu finden und zu verbinden,\nbenötigt die App Bluetooth- und Standort-Berechtigungen.",
+                text = "Um dein Garmin HRM-200 zu finden und zu verbinden,\nbenötigt die App Bluetooth-Berechtigungen.",
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

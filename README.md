@@ -95,8 +95,10 @@ requested:
 |---------------------------|------------------------------------------|
 | `BLUETOOTH_SCAN`          | Discover the heart rate sensor           |
 | `BLUETOOTH_CONNECT`       | Connect to the GATT server               |
-| `ACCESS_FINE_LOCATION`    | Required by Android for some BLE flows   |
 | `POST_NOTIFICATIONS`      | Show the foreground-service notification |
+
+`BLUETOOTH_SCAN` is declared with `neverForLocation`, so no location
+permission is needed.
 
 The foreground service uses the `connectedDevice` type (and the matching
 `FOREGROUND_SERVICE_CONNECTED_DEVICE` permission), which is what keeps the

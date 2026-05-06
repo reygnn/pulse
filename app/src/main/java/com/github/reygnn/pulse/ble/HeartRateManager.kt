@@ -122,6 +122,8 @@ class HeartRateManager(private val context: Context) {
 
     @SuppressLint("MissingPermission")
     fun connectToDevice(device: BluetoothDevice) {
+        // Cancel any pending auto-reconnect from a previous device.
+        handler.removeCallbacksAndMessages(null)
         stopScan()
         userRequestedDisconnect = false
         _state.value = _state.value.copy(

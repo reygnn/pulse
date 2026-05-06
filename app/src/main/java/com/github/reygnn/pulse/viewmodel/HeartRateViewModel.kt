@@ -57,12 +57,12 @@ class HeartRateViewModel(application: Application) : AndroidViewModel(applicatio
         .flatMapLatest { service ->
             service?.hrManager?.state ?: flowOf(HeartRateManager.HrState())
         }
-        .map { bleState ->
-            // Record workout sample if active
+        .onEach { bleState ->
             if (_workoutState.value.isActive && bleState.heartRate > 0) {
                 recordSample(bleState.heartRate)
             }
-
+        }
+        .map { bleState ->
             UiState(
                 connectionStatus = bleState.connectionStatus,
                 heartRate = bleState.heartRate,
@@ -105,10 +105,7 @@ class HeartRateViewModel(application: Application) : AndroidViewModel(applicatio
 
         workoutSamples.add(HrSample(timestampMs = elapsed, heartRate = hr))
 
-        if (hr > 0) {
-            _history.add(hr)
-            if (_history.size > 120) _history.removeFirst()
-        }
+        // _history is already maintained by updateHistory() in the uiState pipeline.
 
         val profile = _userProfile.value
         val session = WorkoutSession(
@@ -231,10 +228,11 @@ class HeartRateViewModel(application: Application) : AndroidViewModel(applicatio
     fun disconnect() {
         if (_workoutState.value.isActive) stopWorkout()
         _history.clear()
-        _service.value?.hrManager?.disconnect()
-        val context = getApplication<Application>()
-        context.stopService(Intent(context, HeartRateService::class.java))
-        bindService()
+        val service = _service.value ?: return
+        service.hrManager.disconnect()
+        // Drop the foreground state + notification but keep the binding alive,
+        // so the user can immediately scan again without re-creating the service.
+        service.stopForegroundState()
     }
 
     override fun onCleared() {

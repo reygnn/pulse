@@ -104,11 +104,13 @@ Compose.
 ## Permissions
 
 API 31+ (siehe Manifest):
-`BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `ACCESS_FINE_LOCATION`,
+`BLUETOOTH_SCAN` (mit `neverForLocation`), `BLUETOOTH_CONNECT`,
 `POST_NOTIFICATIONS`, `FOREGROUND_SERVICE`,
-`FOREGROUND_SERVICE_CONNECTED_DEVICE`. Alle vier Runtime-Permissions
-werden in `MainActivity` über `rememberMultiplePermissionsState` als
-Block angefragt — `minSdk = 36` erspart Versions-Branches.
+`FOREGROUND_SERVICE_CONNECTED_DEVICE`. Die drei Runtime-Permissions
+(`BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `POST_NOTIFICATIONS`) werden
+in `MainActivity` über `rememberMultiplePermissionsState` als Block
+angefragt — `minSdk = 36` erspart Versions-Branches.
+`ACCESS_FINE_LOCATION` ist dank `neverForLocation` nicht nötig.
 
 ---
 

@@ -63,6 +63,11 @@ class HeartRateService : Service() {
         Log.d(TAG, "Foreground service started")
     }
 
+    fun stopForegroundState() {
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        Log.d(TAG, "Foreground state stopped, notification removed")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         serviceScope.cancel()
