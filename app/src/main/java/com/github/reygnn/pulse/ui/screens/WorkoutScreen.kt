@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import android.content.ClipData
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -360,6 +361,13 @@ fun WorkoutSummaryDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        // Workout-Resultate sind nach dem Schliessen unwiederbringlich weg.
+        // Daneben-Tippen mit zittrigen Fingern darf den Dialog nicht zumachen —
+        // nur der explizite Schliessen-Button beendet ihn.
+        properties = DialogProperties(
+            dismissOnClickOutside = false,
+            dismissOnBackPress = false
+        ),
         confirmButton = {
             TextButton(onClick = onDismiss) {
                 Text("Schliessen")
