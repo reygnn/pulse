@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.ParcelUuid
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,6 +34,24 @@ class HeartRateManager(private val context: Context) {
             UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb")
         val BATTERY_LEVEL_UUID: UUID =
             UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb")
+
+        /**
+         * Parse a heart-rate-measurement payload per the BLE Heart Rate Profile.
+         * Flag bit 0 selects between UINT8 (`data[1]`) and UINT16 little-endian
+         * (`data[1] | data[2] << 8`).
+         */
+        @VisibleForTesting
+        internal fun parseHeartRate(data: ByteArray): Int {
+            if (data.isEmpty()) return 0
+            val flags = data[0].toInt()
+            return if (flags and 0x01 == 0) {
+                if (data.size < 2) return 0
+                data[1].toInt() and 0xFF
+            } else {
+                if (data.size < 3) return 0
+                (data[1].toInt() and 0xFF) or ((data[2].toInt() and 0xFF) shl 8)
+            }
+        }
     }
 
     data class HrState(
@@ -265,14 +284,4 @@ class HeartRateManager(private val context: Context) {
         }
     }
 
-    private fun parseHeartRate(data: ByteArray): Int {
-        if (data.isEmpty()) return 0
-
-        val flags = data[0].toInt()
-        return if (flags and 0x01 == 0) {
-            data[1].toInt() and 0xFF
-        } else {
-            (data[1].toInt() and 0xFF) or ((data[2].toInt() and 0xFF) shl 8)
-        }
-    }
 }

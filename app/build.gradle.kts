@@ -51,4 +51,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.37.3")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
+
+    // Unit tests (JVM, no Android runtime)
+    testImplementation("junit:junit:4.13.2")
 }

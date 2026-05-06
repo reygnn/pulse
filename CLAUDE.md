@@ -19,8 +19,11 @@ handlungsleitend halten — keine Marketing-Beschreibung (das ist
 - Persistenz via **SharedPreferences** (nur `UserProfile`, ein paar Werte —
   DataStore wäre Overkill)
 - Coroutines/Flows: UI-State als `StateFlow`
-- Keine Tests (Stand jetzt). Keine DI-Library (kein Hilt/Koin) — `viewModel()`
-  reicht.
+- Unit-Tests: **JUnit 4**, JVM-only — Schwerpunkt auf pure Logik
+  (`HrZone`, `WorkoutSession`, `UserProfile`, `parseHeartRate`).
+  Konventionen: `app/src/test/CLAUDE.md` und
+  `app/src/test/java/com/github/reygnn/pulse/TESTING_CONVENTIONS.kt`.
+- Keine DI-Library (kein Hilt/Koin) — `viewModel()` reicht.
 
 ## Build
 
