@@ -136,6 +136,45 @@ angefragt — `minSdk = 36` erspart Versions-Branches.
 
 ---
 
+## Git-Workflow: Branch vor nicht-trivialer Arbeit
+
+Grössere Änderungen — **grössere Bugfixes, Refactorings, neue Features,
+alles was mehrere Dateien anfasst oder plausibel als Einheit zurück-
+gerollt werden könnte** — passieren auf einem dedizierten Branch, nie
+direkt auf `main`. Triviale Edits (Tippfehler, einzeilige Tweaks,
+Doku-Kleinigkeiten) können auf dem aktuellen Branch bleiben.
+
+Im Zweifel **vor dem Start nachfragen**. Es ist immer günstiger zu
+bestätigen, als mitten in der Implementation zu merken, dass die
+Arbeit auf dem falschen Branch liegt.
+
+**Workflow:**
+
+1. Vor dem Code-Schreiben einen passenden Branch-Namen vorschlagen
+   und bestätigen lassen. Vorgeschlagene Präfixe:
+   - `fix/<slug>` — Bugfix
+   - `refactor/<slug>` — Refactoring
+   - `feature/<slug>` — neues Feature
+   - `chore/<slug>` — Tooling, Build, Dependencies
+   - `test/<slug>` — reine Test-Änderungen
+2. Branch von einem aktuellen `main` (oder passender Basis) abzweigen
+   und vor dem ersten Edit darauf wechseln.
+3. Falls mitten in einer Aufgabe auffällt, dass noch `main` aktiv ist:
+   stoppen und den User informieren — nicht stillschweigend
+   weiterarbeiten.
+
+Der Branch-Name-Vorschlag ist eine Empfehlung; das letzte Wort hat
+der User.
+
+**Nach einem Fast-Forward-Merge in `main`:** zurück auf `main`
+wechseln und den User fragen, ob der gemergte Branch lokal und auf
+dem Remote gelöscht werden soll. Branches nicht stillschweigend mit
+`git branch -d` oder `git push origin --delete` löschen — auch nach
+einem Merge können ein offener PR, laufendes Review oder historische
+Referenzen noch am Branch hängen. Immer vorher bestätigen lassen.
+
+---
+
 ## Was diese Datei NICHT ist
 
 - Keine Beschreibung der App (`README.md`).
